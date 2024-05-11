@@ -89,7 +89,7 @@ function App() {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-start mx-2 lg:mx-8 md:mx-4 sm:mx-2 gap-5 mt-10">
+        <div className="flex flex-wrap justify-evenly mx-2 lg:mx-8 md:mx-4 sm:mx-2 mt-10 gap-10">
           {pokemonList
             .filter(
               (pokemon) =>
