@@ -33,11 +33,8 @@ function App() {
       });
   }
 
-  const handleSearch = (event: {
-    target: { value: SetStateAction<string> };
-  }) => {
-    console.log(event.target.value);
-    setSearchTerm(event.target.value);
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
   };
   useEffect(() => {
     getPokemonList(limit);
@@ -46,8 +43,8 @@ function App() {
   const handleShowMore = () => {
     setLimit((prevLimit) => prevLimit + 20);
   };
-  const handleSortChange = (event) => {
-    const newSortCriteria = event.target.value;
+  const handleSortChange = (e) => {
+    const newSortCriteria = e.target.value;
     setSortCriteria(newSortCriteria);
     setSortOrder(
       sortCriteria === newSortCriteria
