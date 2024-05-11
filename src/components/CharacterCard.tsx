@@ -10,9 +10,10 @@ const CharacterCard = ({ details, count }) => {
   const [type, setType] = useState([]);
   const [weaknesses, setWeaknesses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [listViewType, setListViewType] = useState([]);
   useEffect(() => {
     getPokemonInfo(pokeIndex);
+    getType(details.id);
   }, [pokeIndex]);
 
   const handleCardClick = () => {
@@ -31,6 +32,13 @@ const CharacterCard = ({ details, count }) => {
     setPokeIndex((prevIndex) => (prevIndex - 1 + count) % count);
   };
 
+  function getType(id) {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+      .then((response) => response.json())
+      .then((json) => {
+        setListViewType(json.types.map((type) => type.type.name));
+      });
+  }
   function getPokemonInfo(id: number) {
     setIsLoading(true);
 
@@ -46,9 +54,7 @@ const CharacterCard = ({ details, count }) => {
         const formatted_id = String(id).padStart(3, "0");
         const updatedPokemonInfo = {
           ...json,
-          type: json.types.map(
-            (type: { type: { name: any } }) => type.type.name
-          ),
+          type: json.types.map((type) => type.type.name),
           image: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${formatted_id}.png`,
           stats: json.stats.map((stat) => ({
             name: stat.stat.name,
@@ -98,7 +104,7 @@ const CharacterCard = ({ details, count }) => {
             </p>
           </div>
           <div className="flex gap-2">
-            {type.map((typeName, index) => (
+            {listViewType.map((typeName, index) => (
               <span
                 key={index}
                 className="py-2.5 px-5 me-2 mb-2 text-lg font-medium text-white rounded-lg"
