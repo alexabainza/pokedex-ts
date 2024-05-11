@@ -75,16 +75,24 @@ const CharacterModal = ({
                 <p className="font-bold text-sm">WEAKNESSES</p>
 
                 <div className="flex flex-wrap gap-1">
-                  {weaknesses.map((weakness, index) => (
-                    <span
-                      className="px-4 py-1.5 rounded-2xl text-white text-sm"
-                      style={{
-                        backgroundColor: FindTypeColor(weakness.toLowerCase()),
-                      }}
-                    >
-                      {weakness}
-                    </span>
-                  ))}
+                  {weaknesses
+                    .filter(
+                      (weakness, index) =>
+                        weaknesses.indexOf(weakness) === index
+                    )
+                    .map((weakness, index) => (
+                      <span
+                        key={index}
+                        className="px-4 py-1.5 rounded-2xl text-white text-sm"
+                        style={{
+                          backgroundColor: FindTypeColor(
+                            weakness.toLowerCase()
+                          ),
+                        }}
+                      >
+                        {weakness}
+                      </span>
+                    ))}
                 </div>
               </div>
               <div className="flex flex-col gap-2 mt-5">

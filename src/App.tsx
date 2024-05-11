@@ -1,4 +1,4 @@
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect, SetStateAction, useMemo } from "react";
 import pokedexlogo from "./assets/pokedex-logo.png";
 import CharacterCard from "./components/CharacterCard";
 import Spinner from "./components/Spinner";
@@ -9,6 +9,9 @@ function App() {
   const [pokemonCount, setPokemonCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [limit, setLimit] = useState(10);
+  const [sortCriteria, setSortCriteria] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
+
   function getPokemonList(limit: number) {
     setIsLoading(true);
     fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=0`)
@@ -43,7 +46,28 @@ function App() {
   const handleShowMore = () => {
     setLimit((prevLimit) => prevLimit + 20);
   };
-
+  const handleSortChange = (event) => {
+    const newSortCriteria = event.target.value;
+    setSortCriteria(newSortCriteria);
+    setSortOrder(
+      sortCriteria === newSortCriteria
+        ? sortOrder === "asc"
+          ? "desc"
+          : "asc"
+        : "asc"
+    );
+  };
+  const sortedPokemonList = useMemo(() => {
+    const comparator = (a, b) => {
+      const compareResult = sortOrder === "asc" ? 1 : -1;
+      if (sortCriteria === "id") {
+        return compareResult * (parseInt(a.id) - parseInt(b.id));
+      } else {
+        return compareResult * a.name.localeCompare(b.name);
+      }
+    };
+    return [...pokemonList].sort(comparator);
+  }, [pokemonList, sortCriteria, sortOrder]);
   return (
     <div className="">
       <header className="bg-red-500 py-10 flex items-center justify-center mb-12 h-16 lg:h-32 md:h-20 sm:h-16">
@@ -85,9 +109,36 @@ function App() {
             </button>
           </div>
         </div>
+        <div className="flex justify-center items-center mt-3 gap-10">
+          <label htmlFor="sortCriteria" className="text-2xl">
+            Sort By:
+          </label>
+          <select
+            id="sortCriteria"
+            value={sortCriteria}
+            onChange={handleSortChange}
+            className="py-3 px-4 border border-gray-300 rounded-2xl text-2xl"
+          >
+            <option value="name" className="">
+              Name
+            </option>
+            <option value="id">ID</option>
+          </select>
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="py-3 px-4 border border-gray-300 rounded-2xl text-2xl"
+          >
+            <option value="asc" className="">
+              Ascending
+            </option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
 
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
-          {pokemonList
+          {sortedPokemonList
             .filter(
               (pokemon) =>
                 pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
