@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css?family=Josefin+Sans");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  background-color: #eff1f7;
+}
+body {
+  font-family: "Josefin Sans", cursive;
+}
