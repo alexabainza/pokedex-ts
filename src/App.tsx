@@ -18,12 +18,10 @@ function App() {
         setIsLoading(false);
         setPokemonCount(json.count);
 
-        console.log("data", json.count);
         const initial_data = json.results.map(
           (pokemon: { url: string }, index: any) => {
             const id = pokemon.url.split("/")[6];
             const formatted_id = String(id).padStart(3, "0");
-
             const image = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${formatted_id}.png`;
             return { ...pokemon, id: id, image: image };
           }
@@ -89,7 +87,7 @@ function App() {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-evenly mx-2 lg:mx-8 md:mx-4 sm:mx-2 mt-10 gap-10">
+        <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {pokemonList
             .filter(
               (pokemon) =>
