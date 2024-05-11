@@ -8,8 +8,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [pokemonCount, setPokemonCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   function getPokemonList(limit: number) {
     setIsLoading(true);
     fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=0`)
@@ -51,9 +50,9 @@ function App() {
         <img src={pokedexlogo} className="h-12 lg:h-20 md:h-16 sm:h-12" />
       </header>
 
-      <div className="flex flex-col justify-center items-center align-middle">
-        <div className="w-screen px-10">
-          <div className="relative w-full shadow-lg spread-1 rounded-2xl lg:mb-4 md:mb-3 sm:mb- mb-2">
+      <div className="flex flex-col justify-center items-center align-middle ">
+        <div className="w-[80%] ">
+          <div className="relative  overflow-x-hidden shadow-lg spread-1 rounded-2xl lg:mb-4 md:mb-3 sm:mb- mb-2">
             <input
               value={searchTerm}
               onChange={handleSearch}
@@ -104,7 +103,7 @@ function App() {
         </div>
         {isLoading && <Spinner />}
         <button
-          className="py-2.5 px-5 me-2 mb-2 text-sm font-medium bg-red-700 text-white rounded-lg"
+          className="py-5 px-5 my-12 text-2xl font-medium bg-red-700 text-white rounded-lg"
           onClick={handleShowMore}
         >
           Load more
