@@ -28,11 +28,9 @@ const CharacterCard = ({ details, count }) => {
   };
   const handleNextPokemon = () => {
     setPokeIndex((prevIndex) => (prevIndex + 1) % count);
-    console.log("next button clicked");
   };
 
   const handlePrevPokemon = () => {
-    console.log("previous button clicked");
     setPokeIndex((prevIndex) => (prevIndex - 1 + count) % count);
   };
 
@@ -46,7 +44,6 @@ const CharacterCard = ({ details, count }) => {
 
         setPokemonInfo(json);
         setType(json.types.map((type) => type.type.name));
-        setBackgroundColor(getButtonTypeClass(json.types[0].type.name));
         const formatted_id = String(id).padStart(3, "0");
         setImage(
           `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${formatted_id}.png`
@@ -71,43 +68,50 @@ const CharacterCard = ({ details, count }) => {
   return (
     <>
       <div
-        className="flex flex-col gap-3 py-5 px-8 border-2 bg-white rounded-2xl shadow-sm lg:w-1/5 md:w-1/2 sm:w-3/5 w-4/5"
+        style={{ height: "60vh", width: "20vw" }}
+        className="flex flex-col gap-3 py-5 px-8 border-2 bg-white rounded-2xl shadow-xl hover:scale-125 transition-transform duration-300 ease-in-out border-red-200"
         onClick={handleCardClick}
       >
         <img
           src={details.image}
-          className="h-[60%] self-center w-auto object-cover"
+          className="h-[65%] self-center w-auto object-cover"
         ></img>
-        <div className="flex flex-col align-middle justify-center items-center">
-          <h1 className="text-lg lg:text-2xl md:text-xl sm:text-lg font-semibold">
-            {details.name}
-          </h1>
-          <p className=" text-gray-600">#{details.id}</p>
-
-          {type.map((typeName, index) => (
-            <span
-              key={index}
-              style={{ backgroundColor: FindTypeColor(typeName) }}
-            >
-              {typeName}
-            </span>
-          ))}
+        <div className="flex flex-col align-middle justify-left items-left">
+          <div className="flex flex-col mb-5">
+            <h1 className="text-2xl lg:text-3xl md:text-xl sm:text-lg font-semibold text-blue-800">
+              {details.name}
+            </h1>
+            <p className=" text-gray-500 lg:text-xl md:text-lg sm:text-md  text-xl font-regular">
+              #{String(details.id).padStart(3, "0")}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            {type.map((typeName, index) => (
+              <span
+                key={index}
+                className="py-2.5 px-5 me-2 mb-2 text-lg font-medium text-white rounded-lg"
+                style={{ backgroundColor: FindTypeColor(typeName) }}
+              >
+                {typeName}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
       {showModal && (
-        <div className="fixed z-10 inset-0 -auto flex justify-center items-center">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ">
-            <div className="fixed inset-0 transition-opacity">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="fixed inset-0 transition-opacity">
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
 
-            <div className="bg-white flex flex-col justify-center items-center rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
-              <div className="w-[100%] flex justify-end pe-2">
+            <div className="bg-white w-[30%] py-5  flex flex-col justify-center items-center rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
+              <div className="w-[100%] flex justify-between align-middle items-center border-2 px-10">
+                <h1 className="text-slate-500 text-2xl">#{pokeIndex}</h1>
+
                 <button
                   type="button"
                   onClick={handleClose}
-                  class="focus:outline-none w-10 text-slate-900 focus:ring-4 focus:ring-red-300 rounded-lg text-5xl"
+                  className="focus:outline-none w-10 text-slate-900 focus:ring-4 focus:ring-red-300 rounded-lg text-5xl"
                 >
                   ×
                 </button>
@@ -115,30 +119,45 @@ const CharacterCard = ({ details, count }) => {
               {isLoading ? (
                 <Spinner />
               ) : (
-                <div className="px-10 py-5 flex align-middle justify-center items-center">
+                <div className="px-10 flex align-middle justify-center items-center">
                   <div className="">
-                    <div className="flex flex-col justify-center align-middle items-center">
-                      <img src={image} className="w-[60%]  object-cover"></img>{" "}
-                      <h1 className="">#{pokeIndex}</h1>
-                      <p className="font-bold text-2xl text-center">
-                        {pokemonInfo.name}
-                      </p>
-                    </div>
-                    <div className="flex justify-evenly">
-                      <div className="flex flex-col  justify-center items-center ">
-                        <p className="font-bold text-sm">HEIGHT</p>
-                        <p className="py-1 px-10 mb-2 text-md font-light bg-slate-400  justify-center text-white rounded-2xl border-2">
-                          {pokemonInfo.height}
-                        </p>
+                    <div className="flex flex-row gap-5">
+                      <img
+                        src={image}
+                        className="w-[60%] border-2 object-cover"
+                      ></img>
+
+                      <div className="flex flex-col w-[100%] gap-3">
+                        <div className="flex flex-col justify-start  align-middle">
+                          <p className="font-bold text-md">HEIGHT:</p>
+                          <p className="mb-2 text-md font-regular text-slate-700 rounded-xl bg-slate-200 px-[20px] py-2 ">
+                            {pokemonInfo.height} cm
+                          </p>
+                        </div>
+                        <div className="flex flex-col justify- align-middle">
+                          <p className="font-bold text-sm">WEIGHT</p>
+                          <p className="mb-2 text-md font-regular text-slate-700 rounded-xl bg-slate-200 px-[20px] py-2">
+                            {pokemonInfo.weight} lb
+                          </p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <p className="font-bold text-sm">TYPE</p>
+                          <div className="flex flex-wrap gap-1">
+                            {type.map((typeName, index) => (
+                              <span
+                                key={index}
+                                className="px-5 slign-middle text-lg font-2xl text-white rounded-3xl"
+                                style={{
+                                  backgroundColor: FindTypeColor(typeName),
+                                }}
+                              >
+                                {typeName}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex flex-col  justify-center items-center ">
-                        <p className="font-bold text-sm">WEIGHT</p>
-                        <p className="py-1 px-10 mb-2 text-md font-light bg-gray-400 text-white rounded-2xl">
-                          {pokemonInfo.weight}
-                        </p>
-                      </div>{" "}
                     </div>
-                    <p>Type: {pokemonInfo.types[0].type.name}</p>
                     <p>Base stats {pokemonInfo.stats[0].base_stat}</p>
                     <p>Effort {pokemonInfo.stats[0].effort}</p>
                     <p>Stat Name: {pokemonInfo.stats[0].stat.name}</p>
@@ -158,14 +177,14 @@ const CharacterCard = ({ details, count }) => {
                     ))}
                     <button
                       type="button"
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                       onClick={handlePrevPokemon}
                     >
                       Prev
                     </button>
                     <button
                       type="button"
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                       onClick={handleNextPokemon}
                     >
                       Next
