@@ -7,7 +7,6 @@ const CharacterCard = ({ details, count }) => {
   const [showModal, setShowModal] = useState(false);
   const [pokeIndex, setPokeIndex] = useState(parseInt(details.id));
   const [pokemonInfo, setPokemonInfo] = useState({});
-  const [type, setType] = useState([]);
   const [weaknesses, setWeaknesses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [listViewType, setListViewType] = useState([]);
@@ -48,9 +47,7 @@ const CharacterCard = ({ details, count }) => {
         setIsLoading(false);
 
         setPokemonInfo(json);
-        setType(
-          json.types.map((type: { type: { name: any } }) => type.type.name)
-        );
+
         const formatted_id = String(id).padStart(3, "0");
         const updatedPokemonInfo = {
           ...json,
@@ -124,6 +121,7 @@ const CharacterCard = ({ details, count }) => {
           handleClose={handleClose}
           handleNextPokemon={handleNextPokemon}
           handlePrevPokemon={handlePrevPokemon}
+          isLoading={isLoading}
         />
       )}
     </>

@@ -1,4 +1,4 @@
-import { useState, useEffect, SetStateAction, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import pokedexlogo from "./assets/pokedex-logo.png";
 import CharacterCard from "./components/CharacterCard";
 import Spinner from "./components/Spinner";
@@ -9,7 +9,7 @@ function App() {
   const [pokemonCount, setPokemonCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [limit, setLimit] = useState(10);
-  const [sortCriteria, setSortCriteria] = useState("name");
+  const [sortCriteria, setSortCriteria] = useState("id");
   const [sortOrder, setSortOrder] = useState("asc");
 
   function getPokemonList(limit: number) {
@@ -20,14 +20,12 @@ function App() {
         setIsLoading(false);
         setPokemonCount(json.count);
 
-        const initial_data = json.results.map(
-          (pokemon: { url: string }, index: any) => {
-            const id = pokemon.url.split("/")[6];
-            const formatted_id = String(id).padStart(3, "0");
-            const image = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${formatted_id}.png`;
-            return { ...pokemon, id: id, image: image };
-          }
-        );
+        const initial_data = json.results.map((pokemon) => {
+          const id = pokemon.url.split("/")[6];
+          const formatted_id = String(id).padStart(3, "0");
+          const image = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${formatted_id}.png`;
+          return { ...pokemon, id: id, image: image };
+        });
 
         setPokemonList(initial_data);
       });
@@ -41,7 +39,7 @@ function App() {
   }, [limit]);
 
   const handleShowMore = () => {
-    setLimit((prevLimit) => prevLimit + 20);
+    setLimit((prevLimit) => prevLimit + 10);
   };
   const handleSortChange = (e) => {
     const newSortCriteria = e.target.value;
@@ -65,6 +63,7 @@ function App() {
     };
     return [...pokemonList].sort(comparator);
   }, [pokemonList, sortCriteria, sortOrder]);
+
   return (
     <div className="">
       <header className="bg-red-500 py-10 flex items-center justify-center mb-12 h-16 lg:h-32 md:h-20 sm:h-16">
@@ -116,9 +115,7 @@ function App() {
             onChange={handleSortChange}
             className="py-3 px-4 border border-gray-300 rounded-2xl text-2xl"
           >
-            <option value="name" className="">
-              Name
-            </option>
+            <option value="name">Name</option>
             <option value="id">ID</option>
           </select>
           <select
